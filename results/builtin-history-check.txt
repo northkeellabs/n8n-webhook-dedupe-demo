@@ -1,0 +1,14 @@
+Remove Duplicates node history check (n8n 2.47.5, workflow builtin.json, scope workflow)
+Date (UTC): 2026-11-12. Self-run on a local Docker stack. All events fictional.
+
+Command: docker compose cp scripts/count_dedupe_history.js n8n:/tmp/count.js
+         docker compose exec -T n8n node /tmp/count.js        (before and after)
+         uv run python -m dedupe_demo.harness --variants builtin
+
+before: {"workflowId":"dedupeBuiltin002","context":"","mode":"entries","entries":165}
+run 1 builtin  deliveries= 202 llm_calls=  84 records=  84 duplicates=  64 missing=0 wall=9.5s
+after:  {"workflowId":"dedupeBuiltin002","context":"","mode":"entries","entries":184}
+
+The run used 20 new event ids and all 20 reached the LLM call (missing=0), so the node
+recorded 20 new keys, yet the stored history grew by 19. At least one recorded key was
+overwritten by a concurrent read-modify-write of the history array (lost update).

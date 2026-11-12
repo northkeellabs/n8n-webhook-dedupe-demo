@@ -1,0 +1,41 @@
+============================= test session starts =============================
+platform win32 -- <venv>/python
+rootdir: <repo>
+configfile: pyproject.toml
+testpaths: tests
+plugins: anyio-4.16.0
+collecting ... collected 35 items / 4 deselected / 31 selected
+
+tests/test_claim_sql.py::test_header_wins_over_body PASSED               [  3%]
+tests/test_claim_sql.py::test_empty_header_falls_back_to_body_hash PASSED [  6%]
+tests/test_claim_sql.py::test_body_hash_ignores_key_order_and_whitespace PASSED [  9%]
+tests/test_claim_sql.py::test_different_bodies_give_different_keys PASSED [ 12%]
+tests/test_claim_sql.py::test_array_order_matters PASSED                 [ 16%]
+tests/test_claim_sql.py::test_claim_once_then_nothing PASSED             [ 19%]
+tests/test_claim_sql.py::test_failed_is_reclaimable PASSED               [ 22%]
+tests/test_claim_sql.py::test_fresh_processing_is_not_reclaimable PASSED [ 25%]
+tests/test_claim_sql.py::test_stale_processing_is_reclaimable PASSED     [ 29%]
+tests/test_claim_sql.py::test_done_is_never_reclaimed PASSED             [ 32%]
+tests/test_claim_sql.py::test_concurrent_claims_only_one_wins PASSED     [ 35%]
+tests/test_harness.py::test_make_events_unique_and_fictional PASSED      [ 38%]
+tests/test_harness.py::test_no_timeouts_counts_one_delivery_per_copy PASSED [ 41%]
+tests/test_harness.py::test_timeout_triggers_retries_up_to_limit PASSED  [ 45%]
+tests/test_harness.py::test_retry_stops_after_success PASSED             [ 48%]
+tests/test_harness.py::test_header_can_be_omitted PASSED                 [ 51%]
+tests/test_harness.py::test_summarize_counts_duplicates_and_ignores_foreign_ids PASSED [ 54%]
+tests/test_harness.py::test_summary_and_markdown_report_every_run_with_min_max PASSED [ 58%]
+tests/test_workflows.py::test_importable_shape[naive.json] PASSED        [ 61%]
+tests/test_workflows.py::test_importable_shape[builtin.json] PASSED      [ 64%]
+tests/test_workflows.py::test_importable_shape[fixed.json] PASSED        [ 67%]
+tests/test_workflows.py::test_no_secrets_or_local_paths[naive.json] PASSED [ 70%]
+tests/test_workflows.py::test_no_secrets_or_local_paths[builtin.json] PASSED [ 74%]
+tests/test_workflows.py::test_no_secrets_or_local_paths[fixed.json] PASSED [ 77%]
+tests/test_workflows.py::test_each_workflow_has_its_own_path[naive.json-dedupe-naive] PASSED [ 80%]
+tests/test_workflows.py::test_each_workflow_has_its_own_path[builtin.json-dedupe-builtin] PASSED [ 83%]
+tests/test_workflows.py::test_each_workflow_has_its_own_path[fixed.json-dedupe-fixed] PASSED [ 87%]
+tests/test_workflows.py::test_fixed_responds_immediately_with_202 PASSED [ 90%]
+tests/test_workflows.py::test_naive_and_builtin_respond_when_last_node_finishes PASSED [ 93%]
+tests/test_workflows.py::test_builtin_uses_remove_duplicates_previous_executions PASSED [ 96%]
+tests/test_workflows.py::test_fixed_llm_error_marks_failed PASSED        [100%]
+
+====================== 31 passed, 4 deselected in 0.57s =======================

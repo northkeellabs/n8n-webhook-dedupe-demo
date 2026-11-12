@@ -1,0 +1,25 @@
+[project]
+name = "n8n-webhook-dedupe-demo"
+version = "0.1.0"
+description = "Measured demo: duplicate webhook deliveries in n8n, the built-in Remove Duplicates node, and an exactly-once fix (respond immediately + atomic Postgres claim)."
+license = "MIT"
+requires-python = ">=3.11"
+dependencies = [
+    "httpx>=0.27",
+    "psycopg[binary]>=3.2",
+]
+
+[dependency-groups]
+dev = ["pytest>=8"]
+
+[tool.uv]
+package = false
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+markers = [
+    "stack: needs the running docker compose stack (python scripts/demo.py setup)",
+    "db: needs the Postgres container from the compose stack",
+]
+addopts = "-m 'not stack'"

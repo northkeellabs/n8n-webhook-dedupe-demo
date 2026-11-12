@@ -1,0 +1,153 @@
+{
+  "id": "dedupeFixed00003",
+  "name": "Dedupe demo 3 - fixed (respond 202 + atomic claim)",
+  "active": false,
+  "settings": { "executionOrder": "v1" },
+  "nodes": [
+    {
+      "id": "0b1f3c3e-3a6c-4c2f-9a01-000000000301",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.2,
+      "position": [0, 0],
+      "webhookId": "0b1f3c3e-3a6c-4c2f-9a01-0000000003a1",
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "dedupe-fixed",
+        "responseMode": "onReceived",
+        "options": {
+          "responseCode": { "values": { "responseCode": "customCode", "customCode": 202 } }
+        }
+      }
+    },
+    {
+      "id": "0b1f3c3e-3a6c-4c2f-9a01-000000000302",
+      "name": "Claim event",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.8,
+      "position": [240, 0],
+      "alwaysOutputData": true,
+      "notes": "Idempotency key = X-Event-Id header, else sha256 of the canonical JSON body (jsonb normalises key order and whitespace). Atomic: only one concurrent delivery gets a row back.",
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "WITH k AS (\n  SELECT COALESCE(\n    NULLIF($1, ''),\n    encode(sha256(convert_to(($2::jsonb)::text, 'UTF8')), 'hex')\n  ) AS event_key\n)\nINSERT INTO processed_events (event_key, status, attempts, claimed_at, updated_at)\nSELECT event_key, 'processing', 1, now(), now() FROM k\nON CONFLICT (event_key) DO UPDATE\n  SET status = 'processing',\n      attempts = processed_events.attempts + 1,\n      claimed_at = now(),\n      updated_at = now()\n  WHERE processed_events.status = 'failed'\n     OR (processed_events.status = 'processing'\n         AND processed_events.claimed_at < now() - interval '5 minutes')\nRETURNING event_key;",
+        "options": {
+          "queryReplacement": "={{ $json.headers['x-event-id'] ?? '' }},{{ JSON.stringify($json.body ?? {}) }}"
+        }
+      },
+      "credentials": { "postgres": { "id": "dedupeDemoPg0001", "name": "Dedupe demo Postgres" } }
+    },
+    {
+      "id": "0b1f3c3e-3a6c-4c2f-9a01-000000000303",
+      "name": "Claimed?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [480, 0],
+      "parameters": {
+        "conditions": {
+          "options": { "caseSensitive": true, "leftValue": "", "typeValidation": "loose", "version": 2 },
+          "conditions": [
+            {
+              "id": "6f0c2b8e-0000-4000-8000-000000000301",
+              "leftValue": "={{ $json.event_key }}",
+              "rightValue": "",
+              "operator": { "type": "string", "operation": "exists", "singleValue": true }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      }
+    },
+    {
+      "id": "0b1f3c3e-3a6c-4c2f-9a01-000000000304",
+      "name": "LLM call",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [720, -100],
+      "onError": "continueErrorOutput",
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.OPENAI_BASE_URL }}/chat/completions",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "Authorization", "value": "=Bearer {{ $env.OPENAI_API_KEY }}" },
+            { "name": "X-Event-Id", "value": "={{ $('Claim event').item.json.event_key }}" }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ model: $env.OPENAI_MODEL, messages: [{ role: 'user', content: 'Summarise this fictional webhook event in one line: ' + JSON.stringify($('Webhook').item.json.body) }] }) }}",
+        "options": { "timeout": 30000 }
+      }
+    },
+    {
+      "id": "0b1f3c3e-3a6c-4c2f-9a01-000000000305",
+      "name": "Insert record",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.8,
+      "position": [960, -200],
+      "onError": "continueErrorOutput",
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "INSERT INTO records (workflow, event_key, payload, llm_summary)\nVALUES ('fixed', $1, $2::jsonb, $3)\nRETURNING id, event_key;",
+        "options": {
+          "queryReplacement": "={{ $('Claim event').item.json.event_key }},{{ JSON.stringify($('Webhook').item.json.body ?? {}) }},{{ $json.choices[0].message.content }}"
+        }
+      },
+      "credentials": { "postgres": { "id": "dedupeDemoPg0001", "name": "Dedupe demo Postgres" } }
+    },
+    {
+      "id": "0b1f3c3e-3a6c-4c2f-9a01-000000000306",
+      "name": "Mark done",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.8,
+      "position": [1200, -260],
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "UPDATE processed_events SET status = 'done', updated_at = now()\nWHERE event_key = $1\nRETURNING event_key, status;",
+        "options": {
+          "queryReplacement": "={{ $('Claim event').item.json.event_key }}"
+        }
+      },
+      "credentials": { "postgres": { "id": "dedupeDemoPg0001", "name": "Dedupe demo Postgres" } }
+    },
+    {
+      "id": "0b1f3c3e-3a6c-4c2f-9a01-000000000307",
+      "name": "Mark failed",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.8,
+      "position": [1200, 100],
+      "notes": "A later redelivery of the same event can re-claim a failed row.",
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "UPDATE processed_events SET status = 'failed', updated_at = now()\nWHERE event_key = $1\nRETURNING event_key, status;",
+        "options": {
+          "queryReplacement": "={{ $('Claim event').item.json.event_key }}"
+        }
+      },
+      "credentials": { "postgres": { "id": "dedupeDemoPg0001", "name": "Dedupe demo Postgres" } }
+    }
+  ],
+  "connections": {
+    "Webhook": { "main": [[{ "node": "Claim event", "type": "main", "index": 0 }]] },
+    "Claim event": { "main": [[{ "node": "Claimed?", "type": "main", "index": 0 }]] },
+    "Claimed?": { "main": [[{ "node": "LLM call", "type": "main", "index": 0 }], []] },
+    "LLM call": {
+      "main": [
+        [{ "node": "Insert record", "type": "main", "index": 0 }],
+        [{ "node": "Mark failed", "type": "main", "index": 0 }]
+      ]
+    },
+    "Insert record": {
+      "main": [
+        [{ "node": "Mark done", "type": "main", "index": 0 }],
+        [{ "node": "Mark failed", "type": "main", "index": 0 }]
+      ]
+    }
+  },
+  "pinData": {},
+  "meta": { "templateCredsSetupCompleted": true }
+}
