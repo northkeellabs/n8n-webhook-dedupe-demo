@@ -1,0 +1,335 @@
+{
+  "meta": {
+    "date_utc": "2026-11-12 19:02",
+    "m": 20,
+    "k": 5,
+    "timeout_s": 1.0,
+    "max_retries": 2,
+    "interval_s": 0.2,
+    "mock_latency_s": 1.5,
+    "n8n_version": "2.47.5",
+    "runs_per_variant": 3
+  },
+  "summary": {
+    "naive": {
+      "runs": 3,
+      "unique_events": 20,
+      "http_deliveries": {
+        "min": 296,
+        "max": 299
+      },
+      "llm_calls": {
+        "min": 106,
+        "max": 109
+      },
+      "records": {
+        "min": 106,
+        "max": 109
+      },
+      "duplicate_records": {
+        "min": 86,
+        "max": 89
+      },
+      "events_missing": {
+        "min": 0,
+        "max": 0
+      },
+      "wall_time_s": {
+        "min": 10.03,
+        "max": 11.13
+      }
+    },
+    "builtin": {
+      "runs": 3,
+      "unique_events": 20,
+      "http_deliveries": {
+        "min": 129,
+        "max": 150
+      },
+      "llm_calls": {
+        "min": 29,
+        "max": 50
+      },
+      "records": {
+        "min": 29,
+        "max": 50
+      },
+      "duplicate_records": {
+        "min": 9,
+        "max": 30
+      },
+      "events_missing": {
+        "min": 0,
+        "max": 0
+      },
+      "wall_time_s": {
+        "min": 5.8,
+        "max": 6.22
+      }
+    },
+    "fixed": {
+      "runs": 3,
+      "unique_events": 20,
+      "http_deliveries": {
+        "min": 100,
+        "max": 100
+      },
+      "llm_calls": {
+        "min": 20,
+        "max": 20
+      },
+      "records": {
+        "min": 20,
+        "max": 20
+      },
+      "duplicate_records": {
+        "min": 0,
+        "max": 0
+      },
+      "events_missing": {
+        "min": 0,
+        "max": 0
+      },
+      "wall_time_s": {
+        "min": 5.62,
+        "max": 5.69
+      }
+    }
+  },
+  "runs": [
+    {
+      "variant": "naive",
+      "events_sent": 100,
+      "unique_events": 20,
+      "http_deliveries": 299,
+      "retries": 199,
+      "client_timeouts": 298,
+      "transport_errors": 0,
+      "http_statuses": {
+        "200": 1
+      },
+      "llm_calls": 109,
+      "llm_calls_failed": 0,
+      "records": 109,
+      "duplicate_records": 89,
+      "events_missing": 0,
+      "wall_time_s": 10.03,
+      "run_id": "821eb4",
+      "m": 20,
+      "k": 5,
+      "client_timeout_s": 1.0,
+      "max_retries": 2,
+      "interval_s": 0.2,
+      "mock_latency_s": 1.5,
+      "run": 1
+    },
+    {
+      "variant": "builtin",
+      "events_sent": 100,
+      "unique_events": 20,
+      "http_deliveries": 150,
+      "retries": 50,
+      "client_timeouts": 50,
+      "transport_errors": 0,
+      "http_statuses": {
+        "200": 100
+      },
+      "llm_calls": 50,
+      "llm_calls_failed": 0,
+      "records": 50,
+      "duplicate_records": 30,
+      "events_missing": 0,
+      "wall_time_s": 6.0,
+      "run_id": "b3fc88",
+      "m": 20,
+      "k": 5,
+      "client_timeout_s": 1.0,
+      "max_retries": 2,
+      "interval_s": 0.2,
+      "mock_latency_s": 1.5,
+      "run": 1
+    },
+    {
+      "variant": "fixed",
+      "events_sent": 100,
+      "unique_events": 20,
+      "http_deliveries": 100,
+      "retries": 0,
+      "client_timeouts": 0,
+      "transport_errors": 0,
+      "http_statuses": {
+        "202": 100
+      },
+      "llm_calls": 20,
+      "llm_calls_failed": 0,
+      "records": 20,
+      "duplicate_records": 0,
+      "events_missing": 0,
+      "wall_time_s": 5.64,
+      "run_id": "991118",
+      "m": 20,
+      "k": 5,
+      "client_timeout_s": 1.0,
+      "max_retries": 2,
+      "interval_s": 0.2,
+      "mock_latency_s": 1.5,
+      "run": 1
+    },
+    {
+      "variant": "naive",
+      "events_sent": 100,
+      "unique_events": 20,
+      "http_deliveries": 296,
+      "retries": 196,
+      "client_timeouts": 292,
+      "transport_errors": 0,
+      "http_statuses": {
+        "200": 4
+      },
+      "llm_calls": 106,
+      "llm_calls_failed": 0,
+      "records": 106,
+      "duplicate_records": 86,
+      "events_missing": 0,
+      "wall_time_s": 11.13,
+      "run_id": "175f18",
+      "m": 20,
+      "k": 5,
+      "client_timeout_s": 1.0,
+      "max_retries": 2,
+      "interval_s": 0.2,
+      "mock_latency_s": 1.5,
+      "run": 2
+    },
+    {
+      "variant": "builtin",
+      "events_sent": 100,
+      "unique_events": 20,
+      "http_deliveries": 131,
+      "retries": 31,
+      "client_timeouts": 31,
+      "transport_errors": 0,
+      "http_statuses": {
+        "200": 100
+      },
+      "llm_calls": 31,
+      "llm_calls_failed": 0,
+      "records": 31,
+      "duplicate_records": 11,
+      "events_missing": 0,
+      "wall_time_s": 5.8,
+      "run_id": "ae74eb",
+      "m": 20,
+      "k": 5,
+      "client_timeout_s": 1.0,
+      "max_retries": 2,
+      "interval_s": 0.2,
+      "mock_latency_s": 1.5,
+      "run": 2
+    },
+    {
+      "variant": "fixed",
+      "events_sent": 100,
+      "unique_events": 20,
+      "http_deliveries": 100,
+      "retries": 0,
+      "client_timeouts": 0,
+      "transport_errors": 0,
+      "http_statuses": {
+        "202": 100
+      },
+      "llm_calls": 20,
+      "llm_calls_failed": 0,
+      "records": 20,
+      "duplicate_records": 0,
+      "events_missing": 0,
+      "wall_time_s": 5.69,
+      "run_id": "6f6e4a",
+      "m": 20,
+      "k": 5,
+      "client_timeout_s": 1.0,
+      "max_retries": 2,
+      "interval_s": 0.2,
+      "mock_latency_s": 1.5,
+      "run": 2
+    },
+    {
+      "variant": "naive",
+      "events_sent": 100,
+      "unique_events": 20,
+      "http_deliveries": 296,
+      "retries": 196,
+      "client_timeouts": 292,
+      "transport_errors": 0,
+      "http_statuses": {
+        "200": 4
+      },
+      "llm_calls": 106,
+      "llm_calls_failed": 0,
+      "records": 106,
+      "duplicate_records": 86,
+      "events_missing": 0,
+      "wall_time_s": 10.05,
+      "run_id": "8b5663",
+      "m": 20,
+      "k": 5,
+      "client_timeout_s": 1.0,
+      "max_retries": 2,
+      "interval_s": 0.2,
+      "mock_latency_s": 1.5,
+      "run": 3
+    },
+    {
+      "variant": "builtin",
+      "events_sent": 100,
+      "unique_events": 20,
+      "http_deliveries": 129,
+      "retries": 29,
+      "client_timeouts": 29,
+      "transport_errors": 0,
+      "http_statuses": {
+        "200": 100
+      },
+      "llm_calls": 29,
+      "llm_calls_failed": 0,
+      "records": 29,
+      "duplicate_records": 9,
+      "events_missing": 0,
+      "wall_time_s": 6.22,
+      "run_id": "92aa9e",
+      "m": 20,
+      "k": 5,
+      "client_timeout_s": 1.0,
+      "max_retries": 2,
+      "interval_s": 0.2,
+      "mock_latency_s": 1.5,
+      "run": 3
+    },
+    {
+      "variant": "fixed",
+      "events_sent": 100,
+      "unique_events": 20,
+      "http_deliveries": 100,
+      "retries": 0,
+      "client_timeouts": 0,
+      "transport_errors": 0,
+      "http_statuses": {
+        "202": 100
+      },
+      "llm_calls": 20,
+      "llm_calls_failed": 0,
+      "records": 20,
+      "duplicate_records": 0,
+      "events_missing": 0,
+      "wall_time_s": 5.62,
+      "run_id": "f40567",
+      "m": 20,
+      "k": 5,
+      "client_timeout_s": 1.0,
+      "max_retries": 2,
+      "interval_s": 0.2,
+      "mock_latency_s": 1.5,
+      "run": 3
+    }
+  ]
+}

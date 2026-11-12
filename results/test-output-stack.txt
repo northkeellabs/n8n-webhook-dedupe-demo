@@ -1,0 +1,14 @@
+============================= test session starts =============================
+platform win32 -- <venv>/python
+rootdir: <repo>
+configfile: pyproject.toml
+testpaths: tests
+plugins: anyio-4.16.0
+collecting ... collected 35 items / 31 deselected / 4 selected
+
+tests/test_stack.py::test_fixed_processes_each_event_exactly_once PASSED [ 25%]
+tests/test_stack.py::test_naive_lets_duplicates_through PASSED           [ 50%]
+tests/test_stack.py::test_fault_then_redelivery_processes_once PASSED    [ 75%]
+tests/test_stack.py::test_fixed_without_header_dedupes_on_body_hash PASSED [100%]
+
+====================== 4 passed, 31 deselected in 30.18s ======================

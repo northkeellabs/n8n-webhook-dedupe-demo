@@ -1,0 +1,93 @@
+{
+  "id": "dedupeBuiltin002",
+  "name": "Dedupe demo 2 - built-in Remove Duplicates node",
+  "active": false,
+  "settings": { "executionOrder": "v1" },
+  "nodes": [
+    {
+      "id": "0b1f3c3e-3a6c-4c2f-9a01-000000000201",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.2,
+      "position": [0, 0],
+      "webhookId": "0b1f3c3e-3a6c-4c2f-9a01-0000000002a1",
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "dedupe-builtin",
+        "responseMode": "lastNode",
+        "options": {}
+      }
+    },
+    {
+      "id": "0b1f3c3e-3a6c-4c2f-9a01-000000000202",
+      "name": "Remove Duplicates",
+      "type": "n8n-nodes-base.removeDuplicates",
+      "typeVersion": 2,
+      "position": [240, 0],
+      "notes": "n8n built-in: Remove Items Processed in Previous Executions, Value Is New, dedupe on the provider event id, scope workflow.",
+      "parameters": {
+        "operation": "removeItemsSeenInPreviousExecutions",
+        "logic": "removeItemsWithAlreadySeenKeyValues",
+        "dedupeValue": "={{ $json.headers['x-event-id'] }}",
+        "options": { "scope": "workflow" }
+      }
+    },
+    {
+      "id": "0b1f3c3e-3a6c-4c2f-9a01-000000000204",
+      "name": "LLM call",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [480, -100],
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.OPENAI_BASE_URL }}/chat/completions",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "Authorization", "value": "=Bearer {{ $env.OPENAI_API_KEY }}" },
+            { "name": "X-Event-Id", "value": "={{ $('Webhook').item.json.headers['x-event-id'] }}" }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ model: $env.OPENAI_MODEL, messages: [{ role: 'user', content: 'Summarise this fictional webhook event in one line: ' + JSON.stringify($('Webhook').item.json.body) }] }) }}",
+        "options": { "timeout": 30000 }
+      }
+    },
+    {
+      "id": "0b1f3c3e-3a6c-4c2f-9a01-000000000205",
+      "name": "Insert record",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.8,
+      "position": [720, -100],
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "INSERT INTO records (workflow, event_key, payload, llm_summary)\nVALUES ('builtin', $1, $2::jsonb, $3)\nRETURNING id, event_key;",
+        "options": {
+          "queryReplacement": "={{ $('Webhook').item.json.headers['x-event-id'] }},{{ JSON.stringify($('Webhook').item.json.body ?? {}) }},{{ $json.choices[0].message.content }}"
+        }
+      },
+      "credentials": { "postgres": { "id": "dedupeDemoPg0001", "name": "Dedupe demo Postgres" } }
+    },
+    {
+      "id": "0b1f3c3e-3a6c-4c2f-9a01-000000000207",
+      "name": "Already processed",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [480, 120],
+      "parameters": {}
+    }
+  ],
+  "connections": {
+    "Webhook": { "main": [[{ "node": "Remove Duplicates", "type": "main", "index": 0 }]] },
+    "Remove Duplicates": {
+      "main": [
+        [{ "node": "LLM call", "type": "main", "index": 0 }],
+        [{ "node": "Already processed", "type": "main", "index": 0 }]
+      ]
+    },
+    "LLM call": { "main": [[{ "node": "Insert record", "type": "main", "index": 0 }]] }
+  },
+  "pinData": {},
+  "meta": { "templateCredsSetupCompleted": true }
+}

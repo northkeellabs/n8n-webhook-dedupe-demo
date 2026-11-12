@@ -1,0 +1,175 @@
+{
+  "meta": {
+    "date_utc": "2026-11-12 19:03",
+    "m": 20,
+    "k": 5,
+    "timeout_s": 1.0,
+    "max_retries": 2,
+    "interval_s": 0.0,
+    "mock_latency_s": 1.5,
+    "n8n_version": "2.47.5",
+    "runs_per_variant": 1
+  },
+  "summary": {
+    "naive": {
+      "runs": 1,
+      "unique_events": 20,
+      "http_deliveries": {
+        "min": 300,
+        "max": 300
+      },
+      "llm_calls": {
+        "min": 100,
+        "max": 100
+      },
+      "records": {
+        "min": 100,
+        "max": 100
+      },
+      "duplicate_records": {
+        "min": 80,
+        "max": 80
+      },
+      "events_missing": {
+        "min": 0,
+        "max": 0
+      },
+      "wall_time_s": {
+        "min": 5.36,
+        "max": 5.36
+      }
+    },
+    "builtin": {
+      "runs": 1,
+      "unique_events": 20,
+      "http_deliveries": {
+        "min": 300,
+        "max": 300
+      },
+      "llm_calls": {
+        "min": 282,
+        "max": 282
+      },
+      "records": {
+        "min": 282,
+        "max": 282
+      },
+      "duplicate_records": {
+        "min": 262,
+        "max": 262
+      },
+      "events_missing": {
+        "min": 0,
+        "max": 0
+      },
+      "wall_time_s": {
+        "min": 13.83,
+        "max": 13.83
+      }
+    },
+    "fixed": {
+      "runs": 1,
+      "unique_events": 20,
+      "http_deliveries": {
+        "min": 296,
+        "max": 296
+      },
+      "llm_calls": {
+        "min": 20,
+        "max": 20
+      },
+      "records": {
+        "min": 20,
+        "max": 20
+      },
+      "duplicate_records": {
+        "min": 0,
+        "max": 0
+      },
+      "events_missing": {
+        "min": 0,
+        "max": 0
+      },
+      "wall_time_s": {
+        "min": 5.27,
+        "max": 5.27
+      }
+    }
+  },
+  "runs": [
+    {
+      "variant": "naive",
+      "events_sent": 100,
+      "unique_events": 20,
+      "http_deliveries": 300,
+      "retries": 200,
+      "client_timeouts": 300,
+      "transport_errors": 0,
+      "http_statuses": {},
+      "llm_calls": 100,
+      "llm_calls_failed": 0,
+      "records": 100,
+      "duplicate_records": 80,
+      "events_missing": 0,
+      "wall_time_s": 5.36,
+      "run_id": "4b46bd",
+      "m": 20,
+      "k": 5,
+      "client_timeout_s": 1.0,
+      "max_retries": 2,
+      "interval_s": 0.0,
+      "mock_latency_s": 1.5,
+      "run": 1
+    },
+    {
+      "variant": "builtin",
+      "events_sent": 100,
+      "unique_events": 20,
+      "http_deliveries": 300,
+      "retries": 200,
+      "client_timeouts": 300,
+      "transport_errors": 0,
+      "http_statuses": {},
+      "llm_calls": 282,
+      "llm_calls_failed": 0,
+      "records": 282,
+      "duplicate_records": 262,
+      "events_missing": 0,
+      "wall_time_s": 13.83,
+      "run_id": "6fb076",
+      "m": 20,
+      "k": 5,
+      "client_timeout_s": 1.0,
+      "max_retries": 2,
+      "interval_s": 0.0,
+      "mock_latency_s": 1.5,
+      "run": 1
+    },
+    {
+      "variant": "fixed",
+      "events_sent": 100,
+      "unique_events": 20,
+      "http_deliveries": 296,
+      "retries": 196,
+      "client_timeouts": 294,
+      "transport_errors": 0,
+      "http_statuses": {
+        "202": 2
+      },
+      "llm_calls": 20,
+      "llm_calls_failed": 0,
+      "records": 20,
+      "duplicate_records": 0,
+      "events_missing": 0,
+      "wall_time_s": 5.27,
+      "run_id": "b8b8d0",
+      "m": 20,
+      "k": 5,
+      "client_timeout_s": 1.0,
+      "max_retries": 2,
+      "interval_s": 0.0,
+      "mock_latency_s": 1.5,
+      "run": 1
+    }
+  ]
+}
