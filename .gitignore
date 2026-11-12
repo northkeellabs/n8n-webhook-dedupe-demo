@@ -1,0 +1,21 @@
+# local data and secrets
+data/
+results/raw/
+.env
+REPORT.md
+launch-claude.ps1
+.claude/
+
+# python
+.venv/
+venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+
+# docker volumes (if bind-mounted locally)
+volumes/
+n8n_data/
+pg_data/
