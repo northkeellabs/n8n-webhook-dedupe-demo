@@ -10,6 +10,14 @@ A small, reproducible demo of the most common n8n production bug: the same webho
 
 Everything runs locally in Docker (n8n 2.47.5, Postgres 16, a mock OpenAI-compatible LLM). No paid key is needed. All events, companies and amounts are fictional.
 
+**Video walkthrough (70 s, voice + captions):** the three workflows in the n8n editor, a fresh run under the same duplicate load, and the published results. GitHub starts videos muted: click the speaker icon in the player to hear the voiceover.
+
+
+
+https://github.com/user-attachments/assets/02150ad7-5d25-498d-8314-8ea675403d50
+
+
+
 ## Results: fixed is exactly once in every run
 
 Self-run on a local Docker stack on 2026-11-12 (Windows 11, Docker Desktop); numbers vary by machine. Harness defaults: 20 unique fictional events, each delivered 5 times at the same instant, events started 0.2 s apart (see The harness below), client timeout 1 s, up to 2 retries on timeout, mock LLM latency 1.5 s. Three runs per workflow; every run is shown.
