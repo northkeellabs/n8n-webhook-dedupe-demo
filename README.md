@@ -1,6 +1,6 @@
 # n8n webhook dedupe demo (duplicate events, measured and fixed)
 
-Author: Northkeel Labs (northkeellabs.com)
+Built by [Northkeel Labs](https://northkeellabs.com): AI agents and MCP servers that run inside your own systems.
 
 A small, reproducible demo of the most common n8n production bug: the same webhook event arrives more than once, the workflow runs again, the AI step is paid for twice and the destination table gets duplicate rows. The repo runs three versions of the same workflow under the same load and measures each one:
 
